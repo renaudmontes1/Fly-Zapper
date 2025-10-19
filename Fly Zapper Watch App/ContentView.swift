@@ -205,17 +205,21 @@ struct ContentView: View {
                 gameState.screenBounds = geometry.frame(in: .local)
             }
             .contentShape(Rectangle())
-            .onTapGesture { location in
-                // Check if we hit the fly
-                let hitDistance: CGFloat = 30
-                let dx = location.x - gameState.flyPosition.x
-                let dy = location.y - gameState.flyPosition.y
-                let distance = sqrt(dx * dx + dy * dy)
+            .gesture(
+                DragGesture(minimumDistance: 0)
+                    .onEnded { value in
+                        let location = value.location
+                        // Check if we hit the fly
+                        let hitDistance: CGFloat = 30
+                        let dx = location.x - gameState.flyPosition.x
+                        let dy = location.y - gameState.flyPosition.y
+                        let distance = sqrt(dx * dx + dy * dy)
                 
-                if distance < hitDistance {
-                    gameState.zapFly()
-                }
-            }
+                        if distance < hitDistance {
+                            gameState.zapFly()
+                        }
+                    }
+            )
         }
     }
 }
